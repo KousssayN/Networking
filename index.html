@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Campus Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="files/cisco.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-gradient-custom text-white py-10 text-center rounded-b-lg shadow-md relative">
+        <div class="lang-toggle" id="langToggle">
+            <div class="lang-option active" data-lang="en">EN</div>
+            <div class="lang-option" data-lang="fr">FR</div>
+        </div>
+        <h1 class="text-3xl font-bold text-shadow-md" data-en="Smart Campus Network Simulation"
+            data-fr="Simulation de Réseau de Campus Intelligent">Smart Campus Network Simulation</h1>
+        <p class="text-lg opacity-90" data-en="Mini Project — Network Fundamentals"
+            data-fr="Mini Projet — Fondements des Réseaux">Mini Project — Network Fundamentals</p>
+    </header>
+
+    <nav class="bg-white py-5 shadow-md rounded-b-lg">
+        <ul class="flex justify-center space-x-10">
+            <li><a href="#introduction" class="hover:text-green-700 transition-colors font-semibold text-gray-800"
+                    data-en="Introduction" data-fr="Introduction">Introduction</a></li>
+            <li><a href="#network-fundamentals"
+                    class="hover:text-green-700 transition-colors font-semibold text-gray-800" data-en="Chapter 1"
+                    data-fr="Chapitre 1">Chapter 1</a></li>
+            <li><a href="#architecture" class="hover:text-green-700 transition-colors font-semibold text-gray-800"
+                    data-en="Chapter 2" data-fr="Chapitre 2">Chapter 2</a></li>
+            <li><a href="#simulation" class="hover:text-green-700 transition-colors font-semibold text-gray-800"
+                    data-en="Chapter 3" data-fr="Chapitre 3">Chapter 3</a></li>
+            <li><a href="#configuration" class="hover:text-green-700 transition-colors font-semibold text-gray-800"
+                    data-en="Configuration" data-fr="Configuration">Configuration</a></li>
+            <li><a href="#conclusion" class="hover:text-green-700 transition-colors font-semibold text-gray-800"
+                    data-en="Conclusion" data-fr="Conclusion">Conclusion</a></li>
+        </ul>
+    </nav>
+
+    <main class="container mx-auto mt-8 p-4">
+        <section id="introduction" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Introduction" class="info-icon"></span>
+                <span data-en="Introduction" data-fr="Introduction">Introduction</span>
+            </h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed">
+                    This project presents a detailed simulation of a Smart Campus Network, developed using Cisco Packet
+                    Tracer.
+                    The aim is to replicate the structure and functionality of a modern university network with enhanced
+                    interactivity.
+                    The simulation includes role-based access, integrated services, and advanced security mechanisms.
+                    This project demonstrates the application of networking principles in a practical, real-world
+                    scenario.
+                </p>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed">
+                    Ce projet présente une simulation détaillée d'un réseau de campus intelligent, développé à l'aide de
+                    Cisco Packet Tracer.
+                    L'objectif est de reproduire la structure et la fonctionnalité d'un réseau universitaire moderne
+                    avec une interactivité améliorée.
+                    La simulation comprend un accès basé sur les rôles, des services intégrés et des mécanismes de
+                    sécurité avancés. Ce projet démontre l'application des principes de mise en réseau dans un scénario
+                    pratique du monde réel.
+                </p>
+            </div>
+        </section>
+
+        <section id="network-fundamentals" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Network Fundamentals" class="info-icon"></span>
+                <span data-en="Chapter 1: Network Fundamentals" data-fr="Chapitre 1 : Fondements des Réseaux">Chapter 1:
+                    Network Fundamentals</span>
+            </h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed">
+                    A computer network is a group of interconnected devices that communicate to share resources and
+                    data. Here's a breakdown of key network types:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gradient-to-r from-green-100 to-lime-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">LAN (Local Area Network)</h3>
+                        <p class="text-gray-600">High-speed network within a small geographical area. LANs typically
+                            provide high-speed connectivity.</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-teal-100 to-emerald-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">MAN (Metropolitan Area Network)</h3>
+                        <p class="text-gray-600">Network covering a city or large campus. MANs are larger than LANs and
+                            may be operated by a single entity.</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">WAN (Wide Area Network)</h3>
+                        <p class="text-gray-600">Network spanning a large geographical area. The Internet is the largest
+                            example of a WAN.</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed">
+                    Essential networking devices include:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">R
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Router</h4>
+                            <p class="text-gray-600">Directs data between networks (Layer 3).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Switch</h4>
+                            <p class="text-gray-600">Connects devices in the same network (Layer 2).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Server</h4>
+                            <p class="text-gray-600">Provides services like email, web hosting, or logging to clients.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">PC
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">PC/Laptop</h4>
+                            <p class="text-gray-600">End-user devices used to access network resources.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">AP
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Access Point</h4>
+                            <p class="text-gray-600">Allows wireless devices to connect to the wired network.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed">
+                    Un réseau informatique est un groupe d'appareils interconnectés qui communiquent pour partager des
+                    ressources et des données. Voici une répartition des principaux types de réseaux :
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gradient-to-r from-green-100 to-lime-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">LAN (Réseau Local)</h3>
+                        <p class="text-gray-600">Réseau haut débit dans une petite zone géographique. Les LAN offrent
+                            généralement une connectivité à haut débit.</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-teal-100 to-emerald-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">MAN (Réseau Métropolitain)</h3>
+                        <p class="text-gray-600">Réseau couvrant une ville ou un grand campus. Les MAN sont plus grands
+                            que les LAN et peuvent être gérés par une seule entité.</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg p-4 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">WAN (Réseau Étendu)</h3>
+                        <p class="text-gray-600">Réseau couvrant une grande zone géographique. Internet est le plus
+                            grand exemple de WAN.</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed">
+                    Les appareils réseau essentiels comprennent :
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">R
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Routeur</h4>
+                            <p class="text-gray-600">Dirige les données entre les réseaux (Couche 3).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Commutateur</h4>
+                            <p class="text-gray-600">Connecte les appareils dans le même réseau (Couche 2).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Serveur</h4>
+                            <p class="text-gray-600">Fournit des services comme le courrier électronique, l'hébergement
+                                web ou la journalisation aux clients.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">PC
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">PC/Portable</h4>
+                            <p class="text-gray-600">Appareils utilisateur finaux utilisés pour accéder aux ressources
+                                réseau.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">AP
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Point d'Accès</h4>
+                            <p class="text-gray-600">Permet aux appareils sans fil de se connecter au réseau filaire.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Proposed Architecture" class="info-icon"></span>
+                <span data-en="Chapter 2: Proposed Architecture" data-fr="Chapitre 2 : Architecture Proposée">Chapter 2:
+                    Proposed Architecture</span>
+            </h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed">
+                    Our architecture is designed for a modern campus, emphasizing security and role-based access. The
+                    design includes:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Switches</h3>
+                        <p class="text-gray-600">Three main switches, logically separated by user type.</p>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">VLANs</h3>
+                        <ul class="list-disc list-inside ml-5 text-gray-600">
+                            <li>VLAN 10: Students</li>
+                            <li>VLAN 20: Professors</li>
+                            <li>VLAN 30: Admins</li>
+                            <li>VLAN 40: Guests</li>
+                            <li>VLAN 99: Servers</li>
+                        </ul>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Router-on-a-Stick</h3>
+                        <p class="text-gray-600">Efficient inter-VLAN routing.</p>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Access Control Lists (ACLs)</h3>
+                        <p class="text-gray-600">Policy enforcement for network access.</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed">
+                    The devices used include:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">R
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Router</h4>
+                            <p class="text-gray-600">1 Router.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Switch</h4>
+                            <p class="text-gray-600">3 Switches.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Server</h4>
+                            <p class="text-gray-600">3 Servers (Web, Email, Syslog).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">PC
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">PC/Laptop</h4>
+                            <p class="text-gray-600">Multiple PCs and Laptops.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">Network Design Choices and Justification</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    The design of this Smart Campus Network incorporates several key choices to optimize performance,
+                    security, and manageability:
+                </p>
+                <ul class="list-disc list-inside mb-4 text-gray-700">
+                    <li><span class="strong-text">VLAN Segmentation:</span> VLANs are used to segment the network,
+                        enhancing security and performance.</li>
+                    <li><span class="strong-text">Router-on-a-Stick:</span> This cost-effective method uses
+                        sub-interfaces for inter-VLAN routing.</li>
+                    <li><span class="strong-text">Role-Based Access Control:</span> The network is designed to provide
+                        different levels of access to network resources based on the user's role.</li>
+                    <li><span class="strong-text">Dedicated Server VLAN:</span> Servers are placed in a separate VLAN to
+                        isolate them from user traffic.</li>
+                    <li><span class="strong-text">Static IP Addressing:</span> Static IP addresses are used for servers
+                        and network infrastructure devices.</li>
+                </ul>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed">
+                    Notre architecture est conçue pour un campus moderne, mettant l'accent sur la sécurité et l'accès
+                    basé sur les rôles. La conception comprend :
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Commutateurs</h3>
+                        <p class="text-gray-600">Trois commutateurs principaux, logiquement séparés par type
+                            d'utilisateur.</p>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">VLANs</h3>
+                        <ul class="list-disc list-inside ml-5 text-gray-600">
+                            <li>VLAN 10 : Étudiants</li>
+                            <li>VLAN 20 : Professeurs</li>
+                            <li>VLAN 30 : Administrateurs</li>
+                            <li>VLAN 40 : Invités</li>
+                            <li>VLAN 99 : Serveurs</li>
+                        </ul>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Routeur sur un Bâton</h3>
+                        <p class="text-gray-600">Routage inter-VLAN efficace.</p>
+                    </div>
+                    <div class="arch-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Listes de Contrôle d'Accès (ACL)</h3>
+                        <p class="text-gray-600">Application des politiques pour l'accès au réseau.</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed">
+                    Les appareils utilisés comprennent :
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">R
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Routeur</h4>
+                            <p class="text-gray-600">1 Routeur.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Commutateur</h4>
+                            <p class="text-gray-600">3 Commutateurs.</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Serveur</h4>
+                            <p class="text-gray-600">3 Serveurs (Web, Email, Syslog).</p>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">PC
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">PC/Portable</h4>
+                            <p class="text-gray-600">Plusieurs PC et ordinateurs portables.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">Choix de Conception du Réseau et
+                    Justification</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    La conception de ce réseau de campus intelligent intègre plusieurs choix clés pour optimiser les
+                    performances, la sécurité et la gestion :
+                </p>
+                <ul class="list-disc list-inside mb-4 text-gray-700">
+                    <li><span class="strong-text">Segmentation VLAN :</span> Les VLAN sont utilisés pour segmenter le
+                        réseau, améliorant ainsi la sécurité et les performances.</li>
+                    <li><span class="strong-text">Routeur sur un Bâton :</span> Cette méthode économique utilise des
+                        sous-interfaces pour le routage inter-VLAN.</li>
+                    <li><span class="strong-text">Contrôle d'Accès Basé sur les Rôles :</span> Le réseau est conçu pour
+                        fournir différents niveaux d'accès aux ressources réseau en fonction du rôle de l'utilisateur.
+                    </li>
+                    <li><span class="strong-text">VLAN Dédié aux Serveurs :</span> Les serveurs sont placés dans un VLAN
+                        séparé pour les isoler du trafic utilisateur.</li>
+                    <li><span class="strong-text">Adressage IP Statique :</span> Des adresses IP statiques sont
+                        utilisées pour les serveurs et les appareils d'infrastructure réseau.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="simulation" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Network Simulation" class="info-icon"></span>
+                <span data-en="Chapter 3: Network Simulation & Configuration"
+                    data-fr="Chapitre 3 : Simulation & Configuration du Réseau">Chapter 3: Network Simulation &
+                    Configuration</span>
+            </h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed">
+                    The simulation involves configuring devices and services.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Email System</h3>
+                        <p class="text-gray-700">
+                            An email server was set up on VLAN 99 using SMTP (Simple Mail Transfer Protocol) for sending
+                            and POP3 (Post Office Protocol v3) for receiving mail.
+                            Users were configured with email accounts, and access control was applied to restrict guests
+                            from using the mail server. This ensures that only authorized users (students, professors,
+                            and admins) can send and receive emails within the campus network.
+                        </p>
+                    </div>
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Syslog Server</h3>
+                        <p class="text-gray-700">
+                            A Syslog server was included to log system events from the router. This is useful for
+                            monitoring network health and capturing
+                            events like interface shutdowns or access attempts. The Syslog server provides a centralized
+                            logging solution, which is essential for network troubleshooting and security analysis.
+                        </p>
+                    </div>
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">ACLs (Access Control Lists)</h3>
+                        <p class="text-gray-700">
+                            ACLs were applied on the router interfaces to control which VLANs can communicate. For
+                            example:
+                        </p>
+                        <ul class="list-disc list-inside mb-4 text-gray-700">
+                            <li>Students are blocked from accessing the admin VLAN.</li>
+                            <li>Guests can only access the web server, not other user resources.</li>
+                            <li>Admins can access all resources.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed">
+                    La simulation implique la configuration des appareils et des services.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Système de Messagerie</h3>
+                        <p class="text-gray-700">
+                            Un serveur de messagerie a été configuré sur le VLAN 99 utilisant SMTP (Simple Mail Transfer
+                            Protocol) pour l'envoi et POP3 (Post Office Protocol v3) pour la réception des courriels.
+                            Les utilisateurs ont été configurés avec des comptes de messagerie, et un contrôle d'accès a
+                            été appliqué pour restreindre l'utilisation du serveur de messagerie par les invités. Cela
+                            garantit que seuls les utilisateurs autorisés (étudiants, professeurs et administrateurs)
+                            peuvent envoyer et recevoir des courriels au sein du réseau du campus.
+                        </p>
+                    </div>
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Serveur Syslog</h3>
+                        <p class="text-gray-700">
+                            Un serveur Syslog a été inclus pour enregistrer les événements système du routeur. Ceci est
+                            utile pour surveiller l'état du réseau et capturer
+                            des événements comme des arrêts d'interface ou des tentatives d'accès. Le serveur Syslog
+                            fournit une solution de journalisation centralisée, essentielle pour le dépannage du réseau
+                            et l'analyse de sécurité.
+                        </p>
+                    </div>
+                    <div class="sim-section">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">ACL (Listes de Contrôle d'Accès)</h3>
+                        <p class="text-gray-700">
+                            Des ACL ont été appliquées sur les interfaces du routeur pour contrôler quels VLAN peuvent
+                            communiquer. Par exemple :
+                        </p>
+                        <ul class="list-disc list-inside mb-4 text-gray-700">
+                            <li>Les étudiants ne peuvent pas accéder au VLAN administrateur.</li>
+                            <li>Les invités ne peuvent accéder qu'au serveur web, pas aux autres ressources utilisateur.
+                            </li>
+                            <li>Les administrateurs peuvent accéder à toutes les ressources.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="configuration" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6" data-en="Network Configuration & Commands"
+                data-fr="Configuration du Réseau & Commandes">Network Configuration & Commands</h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Below are the core commands used in Cisco Packet Tracer to configure the Smart Campus Network. These
+                    are real Cisco IOS commands applied to routers and switches.
+                </p>
+
+                <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">1. VLAN Configuration (on Switches)</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+switch> enable
+switch# configure terminal
+switch(config)# vlan 10
+switch(config-vlan)# name STUDENTS
+switch(config)# vlan 20
+switch(config-vlan)# name PROFESSORS
+... etc
+                </pre>
+                <p class="text-gray-700 mb-6">Each VLAN separates devices into logical groups, improving security and
+                    efficiency.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">2. Router Sub-interface Setup (Router-on-a-Stick)
+                </h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router> enable
+router# configure terminal
+router(config)# interface g0/0.10
+router(config-subif)# encapsulation dot1Q 10
+router(config-subif)# ip address 192.168.10.1 255.255.255.0
+... etc
+                </pre>
+                <p class="text-gray-700 mb-6">Sub-interfaces allow routing between VLANs using one physical interface.
+                </p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">3. Access Control Lists (ACLs)</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
+router(config)# access-list 140 permit ip any any
+router(config)# interface g0/0.40
+router(config-if)# ip access-group 140 in
+                </pre>
+                <p class="text-gray-700 mb-6">This ACL prevents guests (VLAN 40) from accessing anything except the web
+                    server.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">4. Syslog Configuration</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router(config)# logging 192.168.99.30
+                </pre>
+                <p class="text-gray-700 mb-6">Enables system log messages to be sent to the Syslog server.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">5. Email Configuration (Server Side)</h3>
+                <p class="text-gray-700">Set up SMTP and POP3 in the server's config tab, assign domain:
+                    <code>campus.com</code>. Add user accounts like <code>student1@campus.com</code>.</p>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Voici les commandes principales utilisées dans Cisco Packet Tracer pour configurer le réseau de
+                    campus intelligent. Ce sont de vraies commandes Cisco IOS appliquées aux routeurs et commutateurs.
+                </p>
+
+                <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">1. Configuration VLAN (sur les commutateurs)
+                </h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+switch> enable
+switch# configure terminal
+switch(config)# vlan 10
+switch(config-vlan)# name ETUDIANTS
+switch(config)# vlan 20
+switch(config-vlan)# name PROFESSEURS
+... etc
+                </pre>
+                <p class="text-gray-700 mb-6">Chaque VLAN sépare les appareils en groupes logiques, améliorant la
+                    sécurité et l'efficacité.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">2. Configuration des Sous-interfaces (Routeur sur
+                    un Bâton)</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router> enable
+router# configure terminal
+router(config)# interface g0/0.10
+router(config-subif)# encapsulation dot1Q 10
+router(config-subif)# ip address 192.168.10.1 255.255.255.0
+... etc
+                </pre>
+                <p class="text-gray-700 mb-6">Les sous-interfaces permettent le routage entre VLAN en utilisant une
+                    seule interface physique.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">3. Listes de Contrôle d'Accès (ACL)</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
+router(config)# access-list 140 permit ip any any
+router(config)# interface g0/0.40
+router(config-if)# ip access-group 140 in
+                </pre>
+                <p class="text-gray-700 mb-6">Cette ACL empêche les invités (VLAN 40) d'accéder à autre chose que le
+                    serveur web.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">4. Configuration Syslog</h3>
+                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+router(config)# logging 192.168.99.30
+                </pre>
+                <p class="text-gray-700 mb-6">Active l'envoi des messages de journal système vers le serveur Syslog.</p>
+
+                <h3 class="text-lg font-semibold text-green-700 mb-2">5. Configuration Email (Côté Serveur)</h3>
+                <p class="text-gray-700">Configurez SMTP et POP3 dans l'onglet de configuration du serveur, attribuez le
+                    domaine : <code>campus.com</code>. Ajoutez des comptes utilisateur comme
+                    <code>etudiant1@campus.com</code>.</p>
+            </div>
+        </section>
+
+        <section id="screenshots" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6" data-en="Screenshots" data-fr="Captures d'Écran">
+                Screenshots</h2>
+            <div class="english">
+                <p class="text-gray-700 mb-4">Place your simulation results here as image proofs:</p>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li><strong>VLAN setup</strong> – <code>img/vlan-setup.png</code></li>
+                    <li><strong>Topology Diagram</strong> – <code>img/topology.png</code></li>
+                    <li><strong>Email sending test</strong> – <code>img/email-success.png</code></li>
+                    <li><strong>ACL denied access</strong> – <code>img/acl-deny.png</code></li>
+                    <li><strong>Syslog event</strong> – <code>img/syslog-interface-down.png</code></li>
+                </ul>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 mb-4">Placez vos résultats de simulation ici comme preuves visuelles :</p>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li><strong>Configuration VLAN</strong> – <code>img/vlan-setup.png</code></li>
+                    <li><strong>Diagramme de Topologie</strong> – <code>img/topology.png</code></li>
+                    <li><strong>Test d'envoi d'email</strong> – <code>img/email-success.png</code></li>
+                    <li><strong>Accès refusé par ACL</strong> – <code>img/acl-deny.png</code></li>
+                    <li><strong>Événement Syslog</strong> – <code>img/syslog-interface-down.png</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conclusion" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Conclusion" class="info-icon"></span>
+                <span data-en="Conclusion" data-fr="Conclusion">Conclusion</span>
+            </h2>
+            <div class="english">
+                <p class="text-gray-700 leading-relaxed">
+                    This project demonstrates how networking principles can be applied to design and secure a functional
+                    campus network.
+                    It involved planning, segmentation, configuration, and testing of services such as VLANs, email
+                    communication, and ACL enforcement. The final setup accurately reflects a real-world scenario of
+                    controlled digital communication
+                    within an academic institution.
+                </p>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 leading-relaxed">
+                    Ce projet démontre comment les principes de mise en réseau peuvent être appliqués pour concevoir et
+                    sécuriser un réseau de campus fonctionnel.
+                    Il a impliqué la planification, la segmentation, la configuration et les tests de services tels que
+                    les VLAN, la communication par courrier électronique et l'application des ACL. La configuration
+                    finale reflète avec précision un scénario réel de communication numérique contrôlée
+                    au sein d'une institution académique.
+                </p>
+            </div>
+        </section>
+
+        <section id="credits" class="interactive-card">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6" data-en="Credits" data-fr="Crédits">Credits</h2>
+            <div class="english">
+                <p class="text-gray-700 mb-2">This project was created by:</p>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li><strong>Koussay Nefzi</strong></li>
+                    <li><strong>Mariem Smii</strong></li>
+                </ul>
+                <p class="mt-4">Faculty of Science, Monastir – 2025</p>
+                <p>Instructor: Fondements des Réseaux</p>
+            </div>
+            <div class="french">
+                <p class="text-gray-700 mb-2">Ce projet a été créé par :</p>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li><strong>Koussay Nefzi</strong></li>
+                    <li><strong>Mariem Smii</strong></li>
+                </ul>
+                <p class="mt-4">Faculté des Sciences, Monastir – 2025</p>
+                <p>Enseignant : Fondements des Réseaux</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-200 text-gray-700 py-6 text-center rounded-t-lg shadow-md mt-8">
+        <p data-en="© 2025 Smart Campus Network Simulation. All rights reserved."
+            data-fr="© 2025 Simulation de Réseau de Campus Intelligent. Tous droits réservés.">© 2025 Smart Campus
+            Network Simulation. All rights reserved.</p>
+    </footer>
+    <div class="scroll-arrow top" id="scrollToTop">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+    </div>
+
+    <div class="scroll-arrow bottom" id="scrollToBottom">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </div>
+
+<script src="control.js"></script>
+
+</body>
+
+</html>
