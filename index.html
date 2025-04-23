@@ -542,16 +542,15 @@ switch(config-if-range)# switchport access vlan 10
                     <li>An IP address for that VLAN (used as the default gateway)</li>
                 </ul>
                 <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-                    router> enable
-                    router# configure terminal
-                    router(config)# interface g0/0.10
-                    router(config-subif)# encapsulation dot1Q 10
-                    router(config-subif)# ip address 192.168.10.1 255.255.255.0
-                    router(config)# interface g0/0.20
-                    router(config-subif)# encapsulation dot1Q 20
-                    router(config-subif)# ip address 192.168.20.1 255.255.255.0
-                    ...etc
-                    </pre>
+router> enable
+router# configure terminal
+router(config)# interface g0/0.10
+router(config-subif)# encapsulation dot1Q 10
+router(config-subif)# ip address 192.168.10.1 255.255.255.0
+router(config)# interface g0/0.20
+router(config-subif)# encapsulation dot1Q 20
+router(config-subif)# ip address 192.168.20.1 255.255.255.0
+...etc</pre>
                 <p class="text-gray-700 leading-relaxed">
                     This allows devices from different VLANs to reach each other, depending on the access rules (ACLs).
                 </p>
@@ -645,14 +644,14 @@ router(config)# logging 192.168.99.30
                         sécurité.
                     </p>
                     <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-                switch> enable
-                switch# configure terminal
-                switch(config)# vlan 10
-                switch(config-vlan)# name ETUDIANTS
-                switch(config)# interface range fa0/1 - 5
-                switch(config-if-range)# switchport mode access
-                switch(config-if-range)# switchport access vlan 10
-                </pre>
+switch> enable
+switch# configure terminal
+switch(config)# vlan 10
+switch(config-vlan)# name ETUDIANTS
+switch(config)# interface range fa0/1 - 5
+switch(config-if-range)# switchport mode access
+switch(config-if-range)# switchport access vlan 10
+</pre>
 
                     <p class="text-gray-700 mb-6">Chaque VLAN sépare les appareils en groupes logiques, améliorant la
                         sécurité et
@@ -673,15 +672,15 @@ router(config)# logging 192.168.99.30
                         <li>Une adresse IP pour ce VLAN (utilisée comme passerelle par défaut)</li>
                     </ul>
                     <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-                router> enable
-                router# configure terminal
-                router(config)# interface g0/0.10
-                router(config-subif)# encapsulation dot1Q 10
-                router(config-subif)# ip address 192.168.10.1 255.255.255.0
-                router(config)# interface g0/0.20
-                router(config-subif)# encapsulation dot1Q 20
-                router(config-subif)# ip address 192.168.20.1 255.255.255.0
-                ...etc
+router> enable
+router# configure terminal
+router(config)# interface g0/0.10
+router(config-subif)# encapsulation dot1Q 10
+router(config-subif)# ip address 192.168.10.1 255.255.255.0
+router(config)# interface g0/0.20
+router(config-subif)# encapsulation dot1Q 20
+router(config-subif)# ip address 192.168.20.1 255.255.255.0
+...etc
                 </pre>
                     <p class="text-gray-700 leading-relaxed">
                         Cela permet aux appareils de différents VLANs de communiquer entre eux, selon les règles d'accès
@@ -704,10 +703,10 @@ router(config)# logging 192.168.99.30
                         <li>Autoriser le trafic normal pour les autres utilisateurs</li>
                     </ul>
                     <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-                router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
-                router(config)# access-list 140 permit ip any any
-                router(config)# interface g0/0.40
-                router(config-if)# ip access-group 140 in
+router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
+router(config)# access-list 140 permit ip any any
+router(config)# interface g0/0.40
+router(config-if)# ip access-group 140 in
                 </pre>
                     <p class="text-gray-700 leading-relaxed">
                         Cette logique ACL simule une politique universitaire réelle : les invités peuvent naviguer sur
@@ -727,7 +726,7 @@ router(config)# logging 192.168.99.30
                         <code>192.168.99.30</code> :
                     </p>
                     <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-                router(config)# logging 192.168.99.30
+router(config)# logging 192.168.99.30
                 </pre>
                     <p class="text-gray-700 leading-relaxed">
                         Lorsque nous avons effectué des actions comme la désactivation d'interfaces, le serveur Syslog a
