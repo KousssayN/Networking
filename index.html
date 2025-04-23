@@ -502,50 +502,120 @@
                 </p>
 
                 <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">1. VLAN Configuration (on Switches)</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    VLANs (Virtual Local Area Networks) were configured to logically separate different user groups on
+                    the campus network. Each VLAN was assigned a unique ID:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 mb-4">
+                    <li>VLAN 10 – Students</li>
+                    <li>VLAN 20 – Professors</li>
+                    <li>VLAN 30 – Admins</li>
+                    <li>VLAN 40 – Guests</li>
+                    <li>VLAN 99 – Servers</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    On each switch, we used the CLI to create these VLANs and assign ports to them. This ensures that
+                    devices in different groups don’t communicate by default, increasing security.
+                </p>
                 <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
 switch> enable
 switch# configure terminal
 switch(config)# vlan 10
 switch(config-vlan)# name STUDENTS
-switch(config)# vlan 20
-switch(config-vlan)# name PROFESSORS
-... etc
-                </pre>
+switch(config)# interface range fa0/1 - 5
+switch(config-if-range)# switchport mode access
+switch(config-if-range)# switchport access vlan 10
+</pre>
+
                 <p class="text-gray-700 mb-6">Each VLAN separates devices into logical groups, improving security and
                     efficiency.</p>
 
                 <h3 class="text-lg font-semibold text-green-700 mb-2">2. Router Sub-interface Setup (Router-on-a-Stick)
                 </h3>
+                <p class="text-gray-700 leading-relaxed">
+                    Since each VLAN is a separate broadcast domain, inter-VLAN communication requires routing. We
+                    implemented a Router-on-a-Stick setup using sub-interfaces on a single physical interface
+                    (GigabitEthernet 0/0). Each sub-interface was configured with:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 mb-4">
+                    <li>An encapsulation ID matching the VLAN (dot1Q)</li>
+                    <li>An IP address for that VLAN (used as the default gateway)</li>
+                </ul>
                 <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-router> enable
-router# configure terminal
-router(config)# interface g0/0.10
-router(config-subif)# encapsulation dot1Q 10
-router(config-subif)# ip address 192.168.10.1 255.255.255.0
-... etc
-                </pre>
+                    router> enable
+                    router# configure terminal
+                    router(config)# interface g0/0.10
+                    router(config-subif)# encapsulation dot1Q 10
+                    router(config-subif)# ip address 192.168.10.1 255.255.255.0
+                    router(config)# interface g0/0.20
+                    router(config-subif)# encapsulation dot1Q 20
+                    router(config-subif)# ip address 192.168.20.1 255.255.255.0
+                    ...etc
+                    </pre>
+                <p class="text-gray-700 leading-relaxed">
+                    This allows devices from different VLANs to reach each other, depending on the access rules (ACLs).
+                </p>
+
                 <p class="text-gray-700 mb-6">Sub-interfaces allow routing between VLANs using one physical interface.
                 </p>
 
                 <h3 class="text-lg font-semibold text-green-700 mb-2">3. Access Control Lists (ACLs)</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    ACLs are used to control traffic and enforce policies. We applied an ACL on the interface connected
+                    to the Guest VLAN (40) to restrict their access:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 mb-4">
+                    <li>Block guests from accessing internal networks</li>
+                    <li>Only allow them to reach the web server</li>
+                    <li>Allow normal traffic for other users</li>
+                </ul>
                 <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
 router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
 router(config)# access-list 140 permit ip any any
 router(config)# interface g0/0.40
 router(config-if)# ip access-group 140 in
-                </pre>
-                <p class="text-gray-700 mb-6">This ACL prevents guests (VLAN 40) from accessing anything except the web
-                    server.</p>
+</pre>
+                <p class="text-gray-700 leading-relaxed">
+                    This ACL logic simulates a real university policy: guests can browse public pages but not access
+                    sensitive data.
+                </p>
 
                 <h3 class="text-lg font-semibold text-green-700 mb-2">4. Syslog Configuration</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    We added a Syslog server to monitor important events in the network — such as interface status
+                    changes or configuration updates. It helps administrators troubleshoot and secure the network.
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    On the router, we enabled logging to the Syslog server located at <code>192.168.99.30</code>:
+                </p>
                 <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
 router(config)# logging 192.168.99.30
-                </pre>
-                <p class="text-gray-700 mb-6">Enables system log messages to be sent to the Syslog server.</p>
+</pre>
+                <p class="text-gray-700 leading-relaxed">
+                    When we performed actions like shutting down interfaces, the Syslog server captured the event,
+                    proving that our monitoring was active.
+                </p>
 
                 <h3 class="text-lg font-semibold text-green-700 mb-2">5. Email Configuration (Server Side)</h3>
-                <p class="text-gray-700">Set up SMTP and POP3 in the server's config tab, assign domain:
-                    <code>campus.com</code>. Add user accounts like <code>student1@campus.com</code>.</p>
+                <p class="text-gray-700 leading-relaxed">
+                    The Email Server was placed in VLAN 99 with the IP address <code>192.168.99.20</code>. We enabled
+                    both <strong>SMTP (Simple Mail Transfer Protocol)</strong> on port 25 for sending emails, and
+                    <strong>POP3 (Post Office Protocol v3)</strong> on port 110 for receiving.
+                    In the server’s configuration (under the Services tab), the email domain was set to
+                    <code>campus.com</code>.
+                    Multiple user accounts were created for testing email functionality, such as:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 mb-4">
+                    <li><code>admin@campus.com</code> — used by an admin PC</li>
+                    <li><code>student1@campus.com</code> — used by a student PC</li>
+                    <li><code>guest@campus.com</code> — used to verify access restrictions</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    Devices were then configured in the Desktop tab → Email tool, where we entered their email address,
+                    username, and the SMTP/POP3 server IP. We tested sending and receiving emails within the allowed
+                    roles (students, professors, admins), and verified that guests could not send or receive, as blocked
+                    by ACLs.
+                </p>
             </div>
             <div class="french">
                 <p class="text-gray-700 leading-relaxed mb-4">
@@ -553,80 +623,381 @@ router(config)# logging 192.168.99.30
                     campus intelligent. Ce sont de vraies commandes Cisco IOS appliquées aux routeurs et commutateurs.
                 </p>
 
-                <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">1. Configuration VLAN (sur les commutateurs)
-                </h3>
-                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-switch> enable
-switch# configure terminal
-switch(config)# vlan 10
-switch(config-vlan)# name ETUDIANTS
-switch(config)# vlan 20
-switch(config-vlan)# name PROFESSEURS
-... etc
+                <div class="french">
+                    <h3 class="text-lg font-semibold text-green-700 mt-6 mb-2">1. Configuration VLAN (sur les
+                        commutateurs)</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Les VLAN (Réseaux Locaux Virtuels) ont été configurés pour séparer logiquement les différents
+                        groupes d'utilisateurs sur
+                        le réseau du campus. Chaque VLAN a reçu un identifiant unique :
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>VLAN 10 – Étudiants</li>
+                        <li>VLAN 20 – Professeurs</li>
+                        <li>VLAN 30 – Administrateurs</li>
+                        <li>VLAN 40 – Invités</li>
+                        <li>VLAN 99 – Serveurs</li>
+                    </ul>
+                    <p class="text-gray-700 leading-relaxed">
+                        Sur chaque commutateur, nous avons utilisé l'interface CLI pour créer ces VLAN et assigner des
+                        ports à chacun. Cela garantit que
+                        les appareils de différents groupes ne communiquent pas par défaut, augmentant ainsi la
+                        sécurité.
+                    </p>
+                    <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+                switch> enable
+                switch# configure terminal
+                switch(config)# vlan 10
+                switch(config-vlan)# name ETUDIANTS
+                switch(config)# interface range fa0/1 - 5
+                switch(config-if-range)# switchport mode access
+                switch(config-if-range)# switchport access vlan 10
                 </pre>
-                <p class="text-gray-700 mb-6">Chaque VLAN sépare les appareils en groupes logiques, améliorant la
-                    sécurité et l'efficacité.</p>
 
-                <h3 class="text-lg font-semibold text-green-700 mb-2">2. Configuration des Sous-interfaces (Routeur sur
-                    un Bâton)</h3>
-                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-router> enable
-router# configure terminal
-router(config)# interface g0/0.10
-router(config-subif)# encapsulation dot1Q 10
-router(config-subif)# ip address 192.168.10.1 255.255.255.0
-... etc
+                    <p class="text-gray-700 mb-6">Chaque VLAN sépare les appareils en groupes logiques, améliorant la
+                        sécurité et
+                        l'efficacité.</p>
+
+                    <h3 class="text-lg font-semibold text-green-700 mb-2">2. Configuration des Sous-interfaces (Routeur
+                        sur un Bâton)
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Comme chaque VLAN est un domaine de diffusion séparé, la communication inter-VLAN nécessite un
+                        routage. Nous avons
+                        mis en place une configuration Routeur sur un Bâton utilisant des sous-interfaces sur une seule
+                        interface physique
+                        (GigabitEthernet 0/0). Chaque sous-interface a été configurée avec :
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>Un ID d'encapsulation correspondant au VLAN (dot1Q)</li>
+                        <li>Une adresse IP pour ce VLAN (utilisée comme passerelle par défaut)</li>
+                    </ul>
+                    <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+                router> enable
+                router# configure terminal
+                router(config)# interface g0/0.10
+                router(config-subif)# encapsulation dot1Q 10
+                router(config-subif)# ip address 192.168.10.1 255.255.255.0
+                router(config)# interface g0/0.20
+                router(config-subif)# encapsulation dot1Q 20
+                router(config-subif)# ip address 192.168.20.1 255.255.255.0
+                ...etc
                 </pre>
-                <p class="text-gray-700 mb-6">Les sous-interfaces permettent le routage entre VLAN en utilisant une
-                    seule interface physique.</p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Cela permet aux appareils de différents VLANs de communiquer entre eux, selon les règles d'accès
+                        (ACL).
+                    </p>
 
-                <h3 class="text-lg font-semibold text-green-700 mb-2">3. Listes de Contrôle d'Accès (ACL)</h3>
-                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
-router(config)# access-list 140 permit ip any any
-router(config)# interface g0/0.40
-router(config-if)# ip access-group 140 in
+                    <p class="text-gray-700 mb-6">Les sous-interfaces permettent le routage entre VLANs en utilisant une
+                        seule interface physique.
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-green-700 mb-2">3. Listes de Contrôle d'Accès (ACL)</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Les ACL sont utilisées pour contrôler le trafic et appliquer des politiques. Nous avons appliqué
+                        une ACL sur l'interface connectée
+                        au VLAN Invité (40) pour restreindre leur accès :
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>Bloquer les invités d'accéder aux réseaux internes</li>
+                        <li>Ne leur permettre d'atteindre que le serveur web</li>
+                        <li>Autoriser le trafic normal pour les autres utilisateurs</li>
+                    </ul>
+                    <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+                router(config)# access-list 140 deny ip 192.168.40.0 0.0.0.255 any
+                router(config)# access-list 140 permit ip any any
+                router(config)# interface g0/0.40
+                router(config-if)# ip access-group 140 in
                 </pre>
-                <p class="text-gray-700 mb-6">Cette ACL empêche les invités (VLAN 40) d'accéder à autre chose que le
-                    serveur web.</p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Cette logique ACL simule une politique universitaire réelle : les invités peuvent naviguer sur
+                        les pages publiques mais pas accéder
+                        aux données sensibles.
+                    </p>
 
-                <h3 class="text-lg font-semibold text-green-700 mb-2">4. Configuration Syslog</h3>
-                <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
-router(config)# logging 192.168.99.30
+                    <h3 class="text-lg font-semibold text-green-700 mb-2">4. Configuration Syslog</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Nous avons ajouté un serveur Syslog pour surveiller les événements importants du réseau — comme
+                        les changements d'état d'interface
+                        ou les mises à jour de configuration. Il aide les administrateurs à dépanner et sécuriser le
+                        réseau.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Sur le routeur, nous avons activé la journalisation vers le serveur Syslog situé à
+                        <code>192.168.99.30</code> :
+                    </p>
+                    <pre class="bg-gray-900 text-green-300 p-4 rounded mb-4 overflow-x-auto">
+                router(config)# logging 192.168.99.30
                 </pre>
-                <p class="text-gray-700 mb-6">Active l'envoi des messages de journal système vers le serveur Syslog.</p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Lorsque nous avons effectué des actions comme la désactivation d'interfaces, le serveur Syslog a
+                        capturé l'événement,
+                        prouvant que notre surveillance était active.
+                    </p>
 
-                <h3 class="text-lg font-semibold text-green-700 mb-2">5. Configuration Email (Côté Serveur)</h3>
-                <p class="text-gray-700">Configurez SMTP et POP3 dans l'onglet de configuration du serveur, attribuez le
-                    domaine : <code>campus.com</code>. Ajoutez des comptes utilisateur comme
-                    <code>etudiant1@campus.com</code>.</p>
+                    <h3 class="text-lg font-semibold text-green-700 mb-2">5. Configuration Email (Côté Serveur)</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Le Serveur Email a été placé dans le VLAN 99 avec l'adresse IP <code>192.168.99.20</code>. Nous
+                        avons activé
+                        à la fois <strong>SMTP (Simple Mail Transfer Protocol)</strong> sur le port 25 pour envoyer des
+                        emails, et
+                        <strong>POP3 (Post Office Protocol v3)</strong> sur le port 110 pour la réception.
+                        Dans la configuration du serveur (sous l'onglet Services), le domaine email a été défini comme
+                        <code>campus.com</code>.
+                        Plusieurs comptes utilisateur ont été créés pour tester la fonctionnalité email, tels que :
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li><code>admin@campus.com</code> — utilisé par un PC administrateur</li>
+                        <li><code>etudiant1@campus.com</code> — utilisé par un PC étudiant</li>
+                        <li><code>invite@campus.com</code> — utilisé pour vérifier les restrictions d'accès</li>
+                    </ul>
+                    <p class="text-gray-700 leading-relaxed">
+                        Les appareils ont ensuite été configurés dans l'onglet Desktop → outil Email, où nous avons
+                        entré leur adresse email,
+                        nom d'utilisateur, et l'adresse IP du serveur SMTP/POP3. Nous avons testé l'envoi et la
+                        réception d'emails parmi les rôles autorisés
+                        (étudiants, professeurs, administrateurs), et vérifié que les invités ne pouvaient pas envoyer
+                        ou recevoir, comme bloqué
+                        par les ACL.
+                    </p>
+                </div>
             </div>
         </section>
 
+        <!-- Add this section right before your Conclusion section -->
         <section id="screenshots" class="interactive-card">
-            <h2 class="text-2xl font-semibold text-green-700 mb-6" data-en="Screenshots" data-fr="Captures d'Écran">
-                Screenshots</h2>
+            <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
+                <span class="mr-3"><img src="" alt="Screenshots" class="info-icon"></span>
+                <span data-en="Project Screenshots" data-fr="Captures d'Écran du Projet">Project Screenshots</span>
+            </h2>
+
             <div class="english">
-                <p class="text-gray-700 mb-4">Place your simulation results here as image proofs:</p>
-                <ul class="list-disc list-inside text-gray-700">
-                    <li><strong>VLAN setup</strong> – <code>img/vlan-setup.png</code></li>
-                    <li><strong>Topology Diagram</strong> – <code>img/topology.png</code></li>
-                    <li><strong>Email sending test</strong> – <code>img/email-success.png</code></li>
-                    <li><strong>ACL denied access</strong> – <code>img/acl-deny.png</code></li>
-                    <li><strong>Syslog event</strong> – <code>img/syslog-interface-down.png</code></li>
-                </ul>
+                <p class="text-gray-700 mb-6">Visual documentation of our network simulation implementation:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Screenshot 1 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/Vlan1.png" alt="VLAN Configuration"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/Vlan1.png', 'VLAN Configuration')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">VLAN Configuration</p>
+                    </div>
+
+                    <!-- Screenshot 2 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/pic1.png" alt="Network Topology"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/pic1.png', 'Network Topology')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Network Topology</p>
+                    </div>
+
+                    <!-- Screenshot 3 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/email_succ.png" alt="Email Test"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/email_succ.png', 'Email Test')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Test Email Succeed</p>
+                    </div>
+                    <!-- Screenshot 3 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/email_failed.png" alt="Email Test"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/email_failed.png', 'Email Test')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Email Test Failed</p>
+                    </div>
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/acl1.png" alt="ACL Denied Access"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/acl1.png', 'ACL Denied Access')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">ACL Configuration</p>
+                    </div>
+
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/ping_succ.png" alt="ACL Denied Access"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/ping_succ.png', 'ACL Denied Access')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">ACL Confirmed Access</p>
+                    </div>
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/ping_failed.png" alt="ACL Denied Access"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/ping_failed.png', 'ACL Denied Access')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">ACL Denied Access</p>
+                    </div>
+
+                    <!-- Screenshot 5 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/syslog.png" alt="Syslog Events"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/syslog.png', 'Syslog Events')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Syslog Events</p>
+                    </div>
+
+                    <!-- Screenshot 6 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/router1.png" alt="Router Configuration"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/router1.png', 'Router Configuration')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Router Configuration</p>
+                    </div>
+                </div>
             </div>
+
             <div class="french">
-                <p class="text-gray-700 mb-4">Placez vos résultats de simulation ici comme preuves visuelles :</p>
-                <ul class="list-disc list-inside text-gray-700">
-                    <li><strong>Configuration VLAN</strong> – <code>img/vlan-setup.png</code></li>
-                    <li><strong>Diagramme de Topologie</strong> – <code>img/topology.png</code></li>
-                    <li><strong>Test d'envoi d'email</strong> – <code>img/email-success.png</code></li>
-                    <li><strong>Accès refusé par ACL</strong> – <code>img/acl-deny.png</code></li>
-                    <li><strong>Événement Syslog</strong> – <code>img/syslog-interface-down.png</code></li>
-                </ul>
+                <p class="text-gray-700 mb-6">Documentation visuelle de notre implémentation de simulation réseau :</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Screenshot 1 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/Vlan1.png" alt="Configuration VLAN"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/Vlan1.png', 'Configuration VLAN')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Configuration VLAN</p>
+                    </div>
+
+                    <!-- Screenshot 2 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/pic1.png" alt="Topologie du Réseau"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/pic1.png', 'Topologie du Réseau')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Topologie du Réseau</p>
+                    </div>
+
+                    <!-- Screenshot 3 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/email_succ.png" alt="Test d'Email"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/email_succ.png', 'Test d'Email')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Test d'Email réussi</p>
+                    </div>
+                    <!-- Screenshot 3 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/email_failed.png" alt="Test d'Email"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/email_failed.png', 'Test d'Email')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Test d'Email échoué</p>
+                    </div>
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/acl1.png" alt="Accès Refusé par ACL"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/acl1.png', 'Accès Refusé par ACL')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Configuration De ACL</p>
+                    </div>
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/ping_succ.png" alt="Accès Refusé par ACL"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/ping_succ.png', 'Accès Refusé par ACL')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Accès Confirmé par ACL</p>
+                    </div>
+                    <!-- Screenshot 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/ping_failed.png" alt="Accès Refusé par ACL"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/ping_failed.com', 'Accès Refusé par ACL')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Accès Refusé par ACL</p>
+                    </div>
+
+                    <!-- Screenshot 5 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/syslog.png" alt="Événements Syslog"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/syslog.png', 'Événements Syslog')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Événements Syslog</p>
+                    </div>
+
+                    <!-- Screenshot 6 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="overflow-hidden rounded-md mb-3">
+                            <img src="files/router1.png" alt="Configuration du Routeur"
+                                class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                onclick="openModal('files/router1.png', 'Configuration du Routeur')">
+                        </div>
+                        <p class="text-gray-700 font-medium text-center">Configuration du Routeur</p>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <!-- Image Modal (add this right before closing </body> tag) -->
+        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="relative max-w-4xl w-full p-4">
+                <button onclick="closeModal()"
+                    class="absolute -top-12 right-0 text-white text-3xl hover:text-green-300">&times;</button>
+                <div class="bg-white p-2 rounded-lg">
+                    <img id="modalImage" src="" alt="" class="w-full h-auto max-h-[80vh]">
+                    <p id="modalCaption" class="text-center mt-2 text-gray-700 font-medium"></p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Add this to your existing JavaScript
+            function openModal(src, caption) {
+                document.getElementById('modalImage').src = src;
+                document.getElementById('modalCaption').textContent = caption;
+                document.getElementById('imageModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
+
+            function closeModal() {
+                document.getElementById('imageModal').classList.add('hidden');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+
+            // Close modal when clicking outside the image
+            document.getElementById('imageModal').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && !document.getElementById('imageModal').classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        </script>
+
 
         <section id="conclusion" class="interactive-card">
             <h2 class="text-2xl font-semibold text-green-700 mb-6 flex items-center">
@@ -695,7 +1066,7 @@ router(config)# logging 192.168.99.30
         </svg>
     </div>
 
-<script src="control.js"></script>
+    <script src="control.js"></script>
 
 </body>
 
