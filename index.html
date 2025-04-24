@@ -892,7 +892,7 @@ router(config)# logging 192.168.99.30
                         <div class="overflow-hidden rounded-md mb-3">
                             <img src="files/email_succ.png" alt="Test d'Email"
                                 class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
-                                onclick="openModal('files/email_succ.png', 'Test d'Email')">
+                                onclick="openModal('files/email_succ.png', 'Test d Email')">
                         </div>
                         <p class="text-gray-700 font-medium text-center">Test d'Email réussi</p>
                     </div>
@@ -901,7 +901,7 @@ router(config)# logging 192.168.99.30
                         <div class="overflow-hidden rounded-md mb-3">
                             <img src="files/email_failed.png" alt="Test d'Email"
                                 class="w-full h-auto hover:scale-105 transition-transform duration-300 cursor-zoom-in"
-                                onclick="openModal('files/email_failed.png', 'Test d'Email')">
+                                onclick="openModal('files/email_failed.png', 'Test d Email')">
                         </div>
                         <p class="text-gray-700 font-medium text-center">Test d'Email échoué</p>
                     </div>
@@ -971,30 +971,37 @@ router(config)# logging 192.168.99.30
         <script>
             // Add this to your existing JavaScript
             function openModal(src, caption) {
-                document.getElementById('modalImage').src = src;
-                document.getElementById('modalCaption').textContent = caption;
-                document.getElementById('imageModal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById('modalImage');
+                const captionText = document.getElementById('modalCaption');
+                
+                modal.classList.add('active');
+                modalImg.src = src;
+                captionText.textContent = caption;
+                document.body.style.overflow = 'hidden';
             }
+    
 
-            function closeModal() {
-                document.getElementById('imageModal').classList.add('hidden');
-                document.body.style.overflow = ''; // Re-enable scrolling
-            }
-
-            // Close modal when clicking outside the image
-            document.getElementById('imageModal').addEventListener('click', function (e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-
-            // Close modal with Escape key
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && !document.getElementById('imageModal').classList.contains('hidden')) {
-                    closeModal();
-                }
-            });
+                   
+    function closeModal() {
+        document.getElementById('imageModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    // Close modal when clicking outside the image
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('imageModal').classList.contains('active')) {
+            closeModal();
+        }
+    });
+    
         </script>
 
 

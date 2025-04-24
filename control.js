@@ -88,17 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Image modal functionality
-    function openModal(src, caption) {
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImage');
-        const captionText = document.getElementById('modalCaption');
-        
-        modal.classList.add('active');
-        modalImg.src = src;
-        captionText.textContent = caption;
-        document.body.style.overflow = 'hidden';
-    }
-    
+            
     function closeModal() {
         document.getElementById('imageModal').classList.remove('active');
         document.body.style.overflow = '';
